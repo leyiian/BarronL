@@ -21,7 +21,7 @@ class LoginController extends Controller
         return response()->json(['acceso' => 'Ok']);
     }
 
-     public function login(Request $request)
+    public function login(Request $request)
     {
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
@@ -33,15 +33,16 @@ class LoginController extends Controller
                 'idUsuario' => $user->id,
                 'nombreUsuario' => $user->name
             );
-            return json_encode($arr);
+            return response()->json($arr);
         } else {
             $arr = array(
-                'acceso' => "", 'token' => "",
+                'acceso' => "",
+                'token' => "",
                 'error' => "NO EXISTE EL USUARIO O CONTRASEÑA",
                 'idUsuario' => 0,
                 'nombreUsuario' => ''
             );
-            return json_encode($arr);
+            return response()->json($arr);
         }
     }
 }
