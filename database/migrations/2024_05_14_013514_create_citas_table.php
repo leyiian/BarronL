@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('id_paciente');
-            $table->date('fecha');
+            $table->dateTime('fecha');
             $table->string('Observaciones');
             $table->string('estado');
             $table->unsignedBigInteger('id_consultorio')->nullable();
