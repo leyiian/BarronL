@@ -20,11 +20,9 @@ return new class extends Migration
             $table->string('estado');
             $table->unsignedBigInteger('id_consultorio')->nullable();
             $table->unsignedBigInteger('id_doctor')->nullable();
-            $table->unsignedBigInteger('id_especilidad');
             $table->foreign('id_paciente')->references('id')->on('pacientes');
             $table->foreign('id_consultorio')->references('id')->on('consultorios');
             $table->foreign('id_doctor')->references('id')->on('doctores');
-            $table->foreign('id_especilidad')->references('id')->on('especialidades');
         });
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CitasController;
 use App\Http\Controllers\DoctorController;
 use App\Http\Controllers\EspecialidadController;
 use App\Http\Controllers\LoginController;
@@ -28,3 +29,5 @@ Route::get('pacientes', [PacienteController::class,'listApi']);
 Route::post('paciente', [PacienteController::class,'getApi']);
 Route::post('paciente/guardar', [PacienteController::class,'saveApi']);
 Route::post('pacientes/eliminar', [PacienteController::class,'listApi']);
+
+Route::post('cita/guardar', [CitasController::class, 'saveApi']);
