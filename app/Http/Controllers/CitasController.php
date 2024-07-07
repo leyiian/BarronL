@@ -26,6 +26,7 @@ class CitasController extends Controller
         $cita->estado = $req->estado;
         $cita->id_consultorio = $req->id_consultorio;
         $cita->id_doctor = $req->id_doctor;
+        $cita->id_especialidades = $req->id_especialidades;
         $cita->save();
 
         return 'Ok';
