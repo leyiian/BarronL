@@ -13,8 +13,9 @@ class DoctorController extends Controller
     public function index(Request $req)
     {
         $doctor = $req->id ? Doctor::findOrFail($req->id) : new Doctor();
+        $user = $req->id ? User::findOrFail($doctor->idUsr) : null;
         $especialidades = Especialidad::all();
-        return view('doctor', compact('doctor', 'especialidades'));
+        return view('doctor', compact('doctor', 'especialidades', 'user'));
     }
 
     public function list($idEspecialidad = null)
@@ -48,9 +49,17 @@ class DoctorController extends Controller
         if ($req->id) {
             $doctor = Doctor::findOrFail($req->id);
             $user = User::findOrFail($doctor->idUsr);
+            $user->name = $req->nombre . ' ' . $req->apellido_paterno . ' ' . $req->apellido_materno;
+            if ($req->filled('email')) {
+                $user->email = $req->email;
+            }
+            if ($req->filled('password')) {
+                $user->password = Hash::make($req->password);
+            }
+            $user->save();
         } else {
             $user = new User();
-            $user->name = $req->nombre;
+            $user->name = $req->nombre .' '. $req->apellido_paterno .' '. $req->apellido_materno;
             $user->email = $req->email;
             $user->password = Hash::make($req->password);
             $user->rol = 'doctor';

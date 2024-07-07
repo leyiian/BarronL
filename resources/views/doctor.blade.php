@@ -35,7 +35,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="email">Email</label>
-                                <input type="email" class="form-control mt-1" id="email" name="email" required placeholder="Email" value="{{ $doctor->user->email ?? '' }}" />
+                                <input type="email" class="form-control mt-1" id="email" name="email" required placeholder="Email" value="{{ $user->email ?? '' }}" />
                             </div>
 
                             <div class="form-group">
