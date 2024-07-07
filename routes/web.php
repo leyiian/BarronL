@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CitasController;
 use App\Http\Controllers\ConsultorioController;
 use App\Http\Controllers\EspecialidadController;
 use App\Http\Controllers\DoctorController;
@@ -51,6 +52,10 @@ Route::get('material/nuevo', [MaterialController::class,'index'])->name('nuevo.m
 Route::post('material/guardar', [MaterialController::class,'save'])->name('guardar.material')->middleware('auth');
 Route::get('materiales', [MaterialController::class, 'list'])->name('materiales')->middleware('auth');
 Route::post('material/borrar', [MaterialController::class,'delete'])->name('borrar.material')->middleware('auth');
+
+Route::post('cita/guardar', [CitasController::class, 'save']);
+Route::get('citas', [CitasController::class, 'list']);
+
 
 
 
