@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->string('nombre');
-            $table->string('ApPat');
-            $table->string('ApMat');
+            $table->string('apPat');
+            $table->string('apMat');
             $table->string('telefono')->nullable();
             $table->unsignedBigInteger('idUsr');
 

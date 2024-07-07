@@ -22,12 +22,12 @@ class CitasController extends Controller
         }
         $cita->id_paciente = $req->id_paciente;
         $cita->fecha = $req->fecha;
-        $cita->Observaciones = $req->observaciones;
+        $cita->Observaciones = $req->Observaciones;
         $cita->estado = 'pendiente';
         $cita->id_consultorio = $req->id_consultorio;
         $cita->id_doctor = $req->id_doctor;
         $cita->save();
 
-        return 'OK';
+        return 'Ok';
     }
 }

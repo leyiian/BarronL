@@ -53,17 +53,17 @@ class PacienteController extends Controller
     {
 
         $user = new User();
-        $user->name = $req->name;
+        $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
         $user->rol = 'paciente';
         $user->save();
 
-        
+
         $paciente = new Paciente();
         $paciente->nombre = $req->nombre;
-        $paciente->ApPat = $req->ApPat;
-        $paciente->ApMat = $req->ApMat;
+        $paciente->apPat = $req->apPat;
+        $paciente->apMat = $req->apMat;
         $paciente->telefono = $req->telefono;
         $paciente->idUsr = $user->id;
         $paciente->save();
