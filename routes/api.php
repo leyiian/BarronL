@@ -31,3 +31,4 @@ Route::post('paciente/guardar', [PacienteController::class,'saveApi']);
 Route::post('pacientes/eliminar', [PacienteController::class,'listApi']);
 
 Route::post('cita/guardar', [CitasController::class, 'saveApi']);
+Route::get('citas', [CitasController::class, 'listApi']);
