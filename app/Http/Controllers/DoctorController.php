@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Especialidad;
 
@@ -43,8 +45,19 @@ class DoctorController extends Controller
     public function save(Request $req)
     {
 
-        $doctor = $req->id ? Doctor::findOrFail($req->id) : new Doctor();
-
+        if ($req->id) {
+            $doctor = Doctor::findOrFail($req->id);
+            $user = User::findOrFail($doctor->idUsr);
+        } else {
+            $user = new User();
+            $user->name = $req->nombre;
+            $user->email = $req->email;
+            $user->password = Hash::make($req->password);
+            $user->rol = 'doctor';
+            $user->save();
+            $doctor = new Doctor();
+            $doctor->idUsr = $user->id;
+        }
 
         $doctor->nombre = $req->nombre;
         $doctor->apellido_paterno = $req->apellido_paterno;

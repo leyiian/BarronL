@@ -34,6 +34,15 @@
                                     name="apellido_materno" required placeholder="apellido materno" value="{{ $doctor->apellido_materno }}" />
                             </div>
                             <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control mt-1" id="email" name="email" required placeholder="Email" value="{{ $doctor->user->email ?? '' }}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control mt-1" id="password" name="password" placeholder="Password" />
+                            </div>
+                            <div class="form-group">
                                 <label for="id_especialidad">Especialidad</label>
                                 <select class="form-control" id="id_especialidad" name="id_especialidad" required>
                                     <option selected >Seleccione una especialidad</option>
