@@ -60,6 +60,7 @@
                                         <form action="{{ route('borrar.doctor') }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $doctor->id }}">
+                                            
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este doctor?');">Eliminar</button>
                                         </form>
                                     </td>

@@ -98,7 +98,9 @@ class DoctorController extends Controller
     public function delete(Request $req)
     {
         $doctor = Doctor::findOrFail($req->id);
+        $user = User::findOrFail($doctor->idUsr);
         $doctor->delete();
+        $user->delete();
         return redirect()->route('doctores');
     }
 
