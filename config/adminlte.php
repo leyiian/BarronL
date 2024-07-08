@@ -381,6 +381,20 @@ return [
                 ],
             ],
         ],
+        [
+            'text' => 'Citas',
+            'icon' => 'fas fa-fw fa-share',
+            'submenu' => [
+                [
+                    'text' => 'Autorizar cita / Asignar doctor',
+                    'route' => 'cita',
+                ],
+                [
+                    'text' => 'lista',
+                    'route' => 'cita',
+                ],
+            ],
+        ],
 
     ],
 

@@ -37,8 +37,8 @@
                                     <tr>
                                         <td>{{ $paciente->id }}</td>
                                         <td>{{ $paciente->nombre }}</td>
-                                        <td>{{ $paciente->ApPat }}</td>
-                                        <td>{{ $paciente->ApMat }}</td>
+                                        <td>{{ $paciente->apPat }}</td>
+                                        <td>{{ $paciente->apMat }}</td>
                                         <td>{{ $paciente->telefono }}</td>
                                         <td>
                                             <a href="{{ route('nuevo.paciente', ['id' => $paciente->id]) }}" class="btn btn-primary">Editar</a>

@@ -41,8 +41,8 @@ class PacienteController extends Controller
         $paciente = $req->id ? Paciente::findOrFail($req->id) : new Paciente();
 
         $paciente->nombre = $req->nombre;
-        $paciente->ApPat = $req->ApPat;
-        $paciente->ApMat = $req->ApMat;
+        $paciente->apPat = $req->apPat;
+        $paciente->apMat = $req->apMat;
         $paciente->telefono = $req->telefono;
         $paciente->save();
 

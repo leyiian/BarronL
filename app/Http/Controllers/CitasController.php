@@ -7,52 +7,53 @@ use Illuminate\Http\Request;
 
 class CitasController extends Controller
 {
-
-
     public function list()
     {
         $citas = Citas::all();
-        return $citas;
+        return view('citas', compact('citas'));
     }
-    public function save(Request $req)
+
+    public function save(Request $request)
     {
 
-        if ($req->id != 0) {
-            $cita = Citas::find($req->id);
-        } else {
-            $cita = new Citas();
-        }
-        $cita->id_paciente = $req->id_paciente;
-        $cita->fecha = $req->fecha;
-        $cita->Observaciones = $req->Observaciones;
-        $cita->estado = $req->estado;
-        $cita->id_consultorio = $req->id_consultorio;
-        $cita->id_doctor = $req->id_doctor;
-        $cita->id_especialidades = $req->id_especialidades;
+        $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
+
+        $cita->id_paciente = $request->id_paciente;
+        $cita->fecha = $request->fecha;
+        $cita->Observaciones = $request->Observaciones;
+        $cita->estado = $request->estado;
+        $cita->id_consultorio = $request->id_consultorio;
+        $cita->id_doctor = $request->id_doctor;
+        $cita->id_especialidades = $request->id_especialidades;
+
         $cita->save();
 
-        return 'Ok';
+        return redirect()->route('cita');
     }
+
     public function listApi()
     {
         $citas = Citas::all();
         return $citas;
     }
-    public function saveApi(Request $req)
+
+    public function saveApi(Request $request)
     {
 
-        if ($req->id != 0) {
-            $cita = Citas::find($req->id);
+        if ($request->id != 0) {
+            $cita = Citas::find($request->id);
         } else {
             $cita = new Citas();
         }
-        $cita->id_paciente = $req->id_paciente;
-        $cita->fecha = $req->fecha;
-        $cita->Observaciones = $req->Observaciones;
-        $cita->estado = $req->estado;
-        $cita->id_consultorio = $req->id_consultorio;
-        $cita->id_doctor = $req->id_doctor;
-        $cita->id_especialidades = $req->id_especialidades;
+
+        $cita->id_paciente = $request->id_paciente;
+        $cita->fecha = $request->fecha;
+        $cita->Observaciones = $request->Observaciones;
+        $cita->estado = $request->estado;
+        $cita->id_consultorio = $request->id_consultorio;
+        $cita->id_doctor = $request->id_doctor;
+        $cita->id_especialidades = $request->id_especialidades;
+
         $cita->save();
 
         return 'Ok';

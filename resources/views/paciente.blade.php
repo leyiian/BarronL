@@ -24,14 +24,14 @@
                                     placeholder="Nombre" value="{{ $paciente->nombre }}" />
                             </div>
                             <div class="form-group">
-                                <label for="ApPat">Apellido Paterno</label>
-                                <input type="text" class="form-control mt-1" id="ApPat"
-                                    name="ApPat" required placeholder="Apellido Paterno" value="{{ $paciente->ApPat }}" />
+                                <label for="apPat">Apellido Paterno</label>
+                                <input type="text" class="form-control mt-1" id="apPat"
+                                    name="apPat" required placeholder="Apellido Paterno" value="{{ $paciente->apPat }}" />
                             </div>
                             <div class="form-group">
-                                <label for="ApMat">Apellido Materno</label>
-                                <input type="text" class="form-control mt-1" id="ApMat"
-                                    name="ApMat" required placeholder="Apellido Materno" value="{{ $paciente->ApMat }}" />
+                                <label for="apMat">Apellido Materno</label>
+                                <input type="text" class="form-control mt-1" id="apMat"
+                                    name="apMat" required placeholder="Apellido Materno" value="{{ $paciente->apMat }}" />
                             </div>
                             <div class="form-group">
                                 <label for="telefono">Teléfono</label>
