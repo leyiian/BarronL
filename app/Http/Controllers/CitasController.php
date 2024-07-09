@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Citas;
+use App\Models\Paciente;
 use Illuminate\Http\Request;
 
 class CitasController extends Controller
@@ -34,7 +35,7 @@ class CitasController extends Controller
 
         $cita->save();
 
-        //return redirect()->route('cita');
+        return redirect()->route('cita');
     }
 
     public function listApi()
@@ -46,13 +47,11 @@ class CitasController extends Controller
     public function saveApi(Request $request)
     {
 
-        if ($request->id != 0) {
-            $cita = Citas::find($request->id);
-        } else {
-            $cita = new Citas();
-        }
+        $paciente = Paciente::where('idUsr', $request->idUsr)->first();
 
-        $cita->id_paciente = $request->id_paciente;
+        $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
+
+        $cita->id_paciente = $paciente->id;
         $cita->fecha = $request->fecha;
         $cita->Observaciones = $request->Observaciones;
         $cita->estado = $request->estado;

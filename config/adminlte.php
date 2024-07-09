@@ -386,7 +386,7 @@ return [
             'icon' => 'fas fa-fw fa-share',
             'submenu' => [
                 [
-                    'text' => 'nuevo',
+                    'text' => 'Autorizacion / Asignar Doctor',
                     'route' => 'nuevo.cita',
                 ],
                 [
