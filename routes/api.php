@@ -21,6 +21,7 @@ Route::post('especialidad/guardar', [EspecialidadController::class,'saveApi']);
 Route::post('especialidad/eliminar', [EspecialidadController::class,'deleteApi']);
 
 Route::get('doctores', [DoctorController::class,'listApi']);
+Route::post('doctor', [DoctorController::class,'getApi']);
 Route::post('doctores/guardar', [DoctorController::class,'saveApi']);
 Route::post('doctores/eliminar', [DoctorController::class,'deleteApi']);
 

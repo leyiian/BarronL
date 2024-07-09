@@ -41,7 +41,11 @@ class DoctorController extends Controller
 
         return $doctores;
     }
-
+    public function getApi(Request $req)
+    {
+        $doctor = Doctor::find($req->id);
+        return $doctor;
+    }
 
     public function save(Request $req)
     {
