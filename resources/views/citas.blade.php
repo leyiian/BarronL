@@ -40,7 +40,7 @@
                             @foreach ($citas as $cita)
                             <tr>
                                 <td>{{ $cita->id }}</td>
-                                <td>{{ $nompaciente }}</td>
+                                <td>{{ $cita->nombreCompletoPaciente }}</td>
                                 <td>{{ $cita->nombreCompletoDoctor }}</td>
                                 <td>{{ $cita->nombreEspecialidad }}</td>
                                 <td>{{ $cita->numeroConsultorio }}</td>

@@ -15,25 +15,37 @@ class CitasController extends Controller
     {
         $cita = $req->id ? Citas::findOrFail($req->id) : new Citas();
 
-        // Obtener datos relacionados
-        $paciente = Paciente::findOrFail($cita->id_paciente);
-        $doctor = Doctor::findOrFail($cita->id_doctor);
-        $especialidad = Especialidad::findOrFail($cita->id_especialidades);
-        $consultorio = Consultorio::findOrFail($cita->id_consultorio);
-
-        // Concatenar nombres completos
-        $nombreCompletoPaciente = $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat;
-        $nombreCompletoDoctor = $doctor->nombre . ' ' . $doctor->apellido_paterno . ' ' . $doctor->apellido_materno;
-
-        return view('cita', compact('cita', 'nombreCompletoPaciente', 'nombreCompletoDoctor', 'especialidad', 'consultorio'));
+        return view('cita', compact('cita'));
     }
-    public function list($id_paciente = null)
+    public function list()
     {
         $citas = Citas::all();
-        $paciente = $id_paciente ? Paciente::find($id_paciente) : null;
-        $nompaciente = $paciente ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat : '';
 
-        return view('citas', compact('citas', 'nompaciente'));
+        foreach ($citas as $cita) {
+            $paciente = Paciente::find($cita->id_paciente);
+            $doctor = Doctor::find($cita->id_doctor);
+            $especialidad = Especialidad::find($cita->id_especialidades);
+            $consultorio = Consultorio::find($cita->id_consultorio);
+
+            // Concatenar nombres completos, manejando posibles valores nulos
+            $cita->nombreCompletoPaciente = $paciente
+                ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
+                : 'Paciente no encontrado';
+
+            $cita->nombreCompletoDoctor = $doctor
+                ? $doctor->nombre . ' ' . $doctor->apellido_paterno . ' ' . $doctor->apellido_materno
+                : 'Doctor no encontrado';
+
+            $cita->nombreEspecialidad = $especialidad
+                ? $especialidad->nombre
+                : 'Especialidad no encontrada';
+
+            $cita->numeroConsultorio = $consultorio
+                ? $consultorio->numero
+                : 'Consultorio no encontrado';
+        }
+
+        return view('citas', compact('citas'));
     }
 
 
