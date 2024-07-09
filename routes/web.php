@@ -53,8 +53,9 @@ Route::post('material/guardar', [MaterialController::class,'save'])->name('guard
 Route::get('materiales', [MaterialController::class, 'list'])->name('materiales')->middleware('auth');
 Route::post('material/borrar', [MaterialController::class,'delete'])->name('borrar.material')->middleware('auth');
 
-//Route::post('citas/guardar', [CitasController::class,'save'])->name('guardar.cita')->middleware('auth');
-Route::post('cita/guardar', [CitasController::class, 'save'])->name('guardar.cita')->middleware('auth');
+Route::get('citas/nuevo', [CitasController::class,'index'])->name('nuevo.cita')->middleware('auth');
+Route::post('citas/guardar', [CitasController::class,'save'])->name('guardar.cita')->middleware('auth');
+Route::get('citas', [CitasController::class, 'list'])->name('citas')->middleware('auth');
 
 
 

@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class CitasController extends Controller
 {
+    public function index(Request $req)
+    {
+        $citas = $req->id ? Citas::findOrFail($req->id) : new Citas();
+
+        return view('cita', compact('citas'));
+    }
     public function list()
     {
         $citas = Citas::all();
@@ -28,7 +34,7 @@ class CitasController extends Controller
 
         $cita->save();
 
-        return redirect()->route('cita');
+        //return redirect()->route('cita');
     }
 
     public function listApi()
