@@ -14,8 +14,23 @@ class CitasController extends Controller
     public function index(Request $req)
     {
         $cita = $req->id ? Citas::findOrFail($req->id) : new Citas();
+        $paciente = Paciente::find($cita->id_paciente);
 
-        return view('cita', compact('cita'));
+        $cita->nombreCompletoPaciente = $paciente
+            ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
+            : 'Paciente no encontrado';
+
+        $especialidad = Especialidad::find($cita->id_especialidades);
+
+        $cita->nombreEspecialidad = $especialidad
+            ? $especialidad->nombre
+            : 'Especialidad no encontrada';
+
+        $doctores = Doctor::all();
+
+        $consultorios = Consultorio::all();
+
+        return view('cita', compact('cita', 'doctores',  'consultorios'));
     }
     public function list()
     {
@@ -27,14 +42,13 @@ class CitasController extends Controller
             $especialidad = Especialidad::find($cita->id_especialidades);
             $consultorio = Consultorio::find($cita->id_consultorio);
 
-            // Concatenar nombres completos, manejando posibles valores nulos
             $cita->nombreCompletoPaciente = $paciente
                 ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
                 : 'Paciente no encontrado';
 
             $cita->nombreCompletoDoctor = $doctor
                 ? $doctor->nombre . ' ' . $doctor->apellido_paterno . ' ' . $doctor->apellido_materno
-                : 'Doctor no encontrado';
+                : 'Doctor no encontrado / Asignado';
 
             $cita->nombreEspecialidad = $especialidad
                 ? $especialidad->nombre
@@ -64,7 +78,7 @@ class CitasController extends Controller
 
         $cita->save();
 
-        return redirect()->route('cita');
+        return redirect()->route('citas');
     }
 
     public function listApi()
