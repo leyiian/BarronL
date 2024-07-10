@@ -66,7 +66,7 @@ class DoctorController extends Controller
             $user->name = $req->nombre .' '. $req->apellido_paterno .' '. $req->apellido_materno;
             $user->email = $req->email;
             $user->password = Hash::make($req->password);
-            $user->rol = 'doctor';
+            $user->rol = 'D';
             $user->save();
             $doctor = new Doctor();
             $doctor->idUsr = $user->id;

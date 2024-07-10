@@ -12,8 +12,8 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('login',[LoginController::class, 'login']);
-Route::post('registro',[LoginController::class,'registro']);
+Route::post('login',[LoginController::class,'login']);
+Route::post('register',[LoginController::class,'registro']);
 
 Route::get('especialidades', [EspecialidadController::class,'listApi']);
 Route::post('especialidad', [EspecialidadController::class,'getApi']);

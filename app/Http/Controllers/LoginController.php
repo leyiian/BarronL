@@ -16,7 +16,7 @@ class LoginController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->rol = 'paciente';
+        $user->rol = 'A';
         $user->save();
         return response()->json(['acceso' => 'Ok']);
     }

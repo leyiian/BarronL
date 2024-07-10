@@ -300,6 +300,7 @@ return [
         [
             'text' => 'especialidades',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuEsp',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -314,6 +315,7 @@ return [
         [
             'text' => 'Doctores',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuDoc',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -328,6 +330,7 @@ return [
         [
             'text' => 'Consultorio',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuCon',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -342,6 +345,7 @@ return [
         [
             'text' => 'Pacientes',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuPac',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -356,6 +360,7 @@ return [
         [
             'text' => 'Medicamentos',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuMed',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -370,6 +375,7 @@ return [
         [
             'text' => 'Material',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuMat',
             'submenu' => [
                 [
                     'text' => 'nuevo',
@@ -384,6 +390,7 @@ return [
         [
             'text' => 'Citas',
             'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuCit',
             'submenu' => [
                 [
                     'text' => 'Autorizacion / Asignar Doctor',
