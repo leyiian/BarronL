@@ -56,7 +56,7 @@ class PacienteController extends Controller
         $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
         $user->email = $req->email;
         $user->password = Hash::make($req->password);
-        $user->rol = 'paciente';
+        $user->rol = 'P';
         $user->save();
 
 
