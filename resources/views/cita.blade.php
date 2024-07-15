@@ -13,7 +13,6 @@
             <input type="hidden" name="id" value="{{ $cita->id }}">
             <input type="hidden" name="id_paciente" value="{{ $cita->id_paciente }}">
             <input type="hidden" name="fecha" value="{{ $cita->fecha }}">
-            <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
             <input type="hidden" name="id_especialidades" value="{{ $cita->id_especialidades }}">
             <div class="form-group">
                 <label for="nombreCompletoPaciente">Paciente</label>
@@ -22,6 +21,10 @@
             <div class="form-group">
                 <label for="nombreCompletoPaciente">Especialidad</label>
                 <input type="text" class="form-control" id="nombreCompletoPaciente" value="{{ $cita->nombreEspecialidad }}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="nombreCompletoPaciente">Observaciones</label>
+                <input  class="form-control" name="Observaciones" value="{{ $cita->Observaciones }}">
             </div>
             <div class="form-group">
                 <label for="id_doctor">Doctor</label>

@@ -403,6 +403,22 @@ return [
             ],
         ],
 
+        [
+            'text' => 'Citas Asignadas',
+            'icon' => 'fas fa-fw fa-share',
+            'can' => 'menuCit',
+            'submenu' => [
+                [
+                    'text' => 'Autorizacion / Asignar Doctor',
+                    'route' => 'nuevo.cita',
+                ],
+                [
+                    'text' => 'lista',
+                    'route' => 'citasasignadas',
+                ],
+            ],
+        ],
+
     ],
 
     /*
