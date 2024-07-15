@@ -56,7 +56,7 @@ Route::post('material/borrar', [MaterialController::class,'delete'])->name('borr
 Route::get('citas/nuevo', [CitasController::class,'index'])->name('nuevo.cita')->middleware('auth');
 Route::post('citas/guardar', [CitasController::class,'save'])->name('guardar.citas')->middleware('auth');
 Route::get('citas', [CitasController::class, 'list'])->name('citas')->middleware('auth');
-Route::get('citas/Doctor', [CitasController::class, 'listDoctor'])->name('citasasignadas')->middleware('auth');
+
 Route::post('cita/borrar', [CitasController::class,'delete'])->name('borrar.cita')->middleware('auth');
 
 

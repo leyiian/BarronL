@@ -55,8 +55,17 @@ class CitasController extends Controller
     }
     public function list()
     {
-        $citas = Citas::all();
+        $user = Auth::user();
 
+        if ($user->rol == 'A') {
+            $citas = Citas::all();
+        }
+        elseif ($user->rol == 'D') {
+            $doctor = Doctor::where('idUsr', $user->id)->first();
+            $id_especialidad = $doctor->id_especialidad;
+            $citas = Citas::where('id_especialidades', $id_especialidad)
+                ->get();
+        }
         foreach ($citas as $cita) {
             $paciente = Paciente::find($cita->id_paciente);
             $doctor = Doctor::find($cita->id_doctor);
@@ -81,50 +90,6 @@ class CitasController extends Controller
         }
 
         return view('citas', compact('citas'));
-    }
-
-    public function listDoctor()
-    {
-        // Obtener el usuario autenticado, que se espera que sea un doctor
-        $user = Auth::user();
-
-        // Obtener al doctor basado en el ID de usuario
-        $doctor = Doctor::where('idUsr', $user->id)->first();
-
-
-
-        // Obtener el ID de especialidad del doctor
-        $id_especialidad = $doctor->id_especialidad;
-
-        // Obtener las citas que correspondan a la especialidad específica y cargar las relaciones necesarias
-        $citas = Citas::where('id_especialidades', $id_especialidad)
-            ->get();
-
-        // Mapear los datos para la vista
-        foreach ($citas as $cita) {
-            $paciente = Paciente::find($cita->id_paciente);
-            $doctor = Doctor::find($cita->id_doctor);
-            $especialidad = Especialidad::find($cita->id_especialidades);
-            $consultorio = Consultorio::find($cita->id_consultorio);
-
-            $cita->nombreCompletoPaciente = $paciente
-                ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
-                : 'Paciente no encontrado';
-
-            $cita->nombreCompletoDoctor = $doctor
-                ? $doctor->nombre . ' ' . $doctor->apellido_paterno . ' ' . $doctor->apellido_materno
-                : 'Doctor no encontrado / Asignado';
-
-            $cita->nombreEspecialidad = $especialidad
-                ? $especialidad->nombre
-                : 'Especialidad no encontrada';
-
-            $cita->numeroConsultorio = $consultorio
-                ? $consultorio->numero
-                : 'Consultorio no encontrado';
-        }
-
-        return view('citasasignadas', compact('citas'));
     }
 
     public function save(Request $request)
