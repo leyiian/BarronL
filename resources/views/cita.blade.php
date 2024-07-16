@@ -94,9 +94,16 @@
             <div class="form-group">
                 <label>Medicamentos Seleccionados</label>
                 <ul id="listaMedicamentos" class="list-group">
-                    <!-- Los medicamentos seleccionados se agregarán aquí dinámicamente -->
+                    @foreach($medicamentosRecetados as $medicamentoRecetado)
+                        <li class="list-group-item" data-id="{{ $medicamentoRecetado->id }}">
+                            ({{ $medicamentoRecetado->codigo }}) {{ $medicamentoRecetado->descripcion }}
+                            - Cantidad: {{ $medicamentoRecetado->cantidad }}, Unidad: {{ $medicamentoRecetado->unidad }},
+                            Cada Cuándo: {{ $medicamentoRecetado->cadaCuando }}, Cuántos Días: {{ $medicamentoRecetado->cuantosDias }}
+                        </li>
+                    @endforeach
                 </ul>
             </div>
+
 
             <div class="form-group">
                 <label for="estado">Estado</label>

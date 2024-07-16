@@ -53,8 +53,9 @@ class CitasController extends Controller
 
         $consultorios = Consultorio::all();
         $medicamentos = Medicamento::all();
+        $medicamentosRecetados = $req->id ? MedicamentosRecetados::where('id_cita', $cita->id)->get() : collect();
 
-        return view('cita', compact('cita', 'doctores',  'consultorios', 'medicamentos'));
+        return view('cita', compact('cita', 'doctores',  'consultorios', 'medicamentos','medicamentosRecetados'));
     }
     public function list()
     {
