@@ -8,6 +8,7 @@ use App\Models\Doctor;
 use App\Models\Especialidad;
 use App\Models\Consultorio;
 use App\Models\Medicamento;
+use App\Models\MedicamentosRecetados;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -103,11 +104,24 @@ class CitasController extends Controller
         $cita->Observaciones = $request->Observaciones;
         $cita->estado = $request->estado;
         $cita->id_consultorio = $request->id_consultorio;
-        $cita->id_medicamento = $request->id_medicamento;
         $cita->id_doctor = $request->id_doctor;
         $cita->id_especialidades = $request->id_especialidades;
-
         $cita->save();
+        
+        $medicamentos = $request->medicamentos;
+        if ($request->medicamentos) {
+            foreach ($request->medicamentos as $medicamentoJSON) {
+                $medicamento = json_decode($medicamentoJSON, true);
+                $medicamentoRecetado = new MedicamentosRecetados();
+                $medicamentoRecetado->id_cita = $cita->id;
+                $medicamentoRecetado->id_medicamento = $medicamento['id'];
+                $medicamentoRecetado->cantidad = $medicamento['cantidad'];
+                $medicamentoRecetado->unidad = $medicamento['unidad'];
+                $medicamentoRecetado->cadaCuando = $medicamento['cadaCuando'];
+                $medicamentoRecetado->cuantosDias = $medicamento['cuantosDias'];
+                $medicamentoRecetado->save();
+            }
+        }
 
         return redirect()->route('citas');
     }
