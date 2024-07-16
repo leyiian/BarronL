@@ -30,6 +30,7 @@
                                 <th>Doctor</th>
                                 <th>Especialidad</th>
                                 <th>Consultorio</th>
+                                <th>id medicamento</th>
                                 <th>Fecha</th>
                                 <th>Observaciones</th>
                                 <th>Estado</th>
@@ -44,6 +45,7 @@
                                 <td>{{ $cita->nombreCompletoDoctor }}</td>
                                 <td>{{ $cita->nombreEspecialidad }}</td>
                                 <td>{{ $cita->numeroConsultorio }}</td>
+                                <td>{{ $cita->id_medicamento }}</td>
                                 <td>{{ $cita->fecha }}</td>
                                 <td>{{ $cita->Observaciones }}</td>
                                 <td>{{ $cita->estado }}</td>

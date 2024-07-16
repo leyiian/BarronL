@@ -34,15 +34,15 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Gate::define('menuPac', function (User $user) {
-            return $user->rol == "A" || $user->rol == "D";
+            return $user->rol == "A";
         });
 
         Gate::define('menuMed', function (User $user) {
-            return $user->rol == "A" || $user->rol == "D";
+            return $user->rol == "A";
         });
 
         Gate::define('menuMat', function (User $user) {
-            return $user->rol == "A" || $user->rol == "D";
+            return $user->rol == "A";
         });
 
         Gate::define('menuCit', function (User $user) {

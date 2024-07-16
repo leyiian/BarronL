@@ -37,6 +37,17 @@
                     @endforeach
                 </select>
             </div>
+            <div class="form-group">
+                <label for="id_medicamento">medicamento</label>
+                <select name="id_medicamento" id="id_medicamento" class="form-control">
+                    <option value="">Seleccionar medicamento</option>
+                    @foreach($medicamentos as $medicamento)
+                        <option value="{{ $medicamento->id }}" {{ $cita->id_medicamento == $medicamento->id ? 'selected' : '' }}>
+                            {{ $medicamento->codigo }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
 
             <div class="form-group">
                 <label for="estado">Estado</label>
