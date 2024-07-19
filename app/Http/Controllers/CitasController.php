@@ -53,7 +53,7 @@ class CitasController extends Controller
 
         $consultorios = Consultorio::all();
         $medicamentos = Medicamento::all();
-        $medicamentosRecetados = $req->id ? MedicamentosRecetados::where('id_cita', $cita->id)->get() : collect();
+        $medicamentosRecetados = $req->id ? MedicamentosRecetados::with('medicamento')->where('id_cita', $cita->id)->get() : collect();
 
         return view('cita', compact('cita', 'doctores',  'consultorios', 'medicamentos','medicamentosRecetados'));
     }
@@ -157,5 +157,12 @@ class CitasController extends Controller
         $cita = Citas::findOrFail($req->id);
         $cita->delete();
         return redirect()->route('citas');
+    }
+
+    public function eliminarMedicamentoRecetado(Request $req)
+    {
+        $medicamentoRecetado = MedicamentosRecetados::findOrFail($req->id);
+        $medicamentoRecetado->delete();
+        return response()->json(['success' => true]);
     }
 }

@@ -9,4 +9,9 @@ class MedicamentosRecetados extends Model
 {
     use HasFactory;
     protected $table = 'medicamento_recetado';
+    
+    public function medicamento()
+    {
+        return $this->belongsTo(Medicamento::class, 'id_medicamento');
+    }
 }

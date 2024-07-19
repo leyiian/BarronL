@@ -59,6 +59,4 @@ Route::get('citas', [CitasController::class, 'list'])->name('citas')->middleware
 
 Route::post('cita/borrar', [CitasController::class,'delete'])->name('borrar.cita')->middleware('auth');
 
-
-
-
+Route::delete('/eliminar-medicamento/{id}', [CitasController::class, 'eliminarMedicamentoRecetado'])->name('eliminar.medicamentorecetado')->middleware('auth');

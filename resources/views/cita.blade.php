@@ -95,10 +95,11 @@
                 <label>Medicamentos Seleccionados</label>
                 <ul id="listaMedicamentos" class="list-group">
                     @foreach($medicamentosRecetados as $medicamentoRecetado)
-                        <li class="list-group-item" data-id="{{ $medicamentoRecetado->id }}">
-                            ({{ $medicamentoRecetado->codigo }}) {{ $medicamentoRecetado->descripcion }}
+                        <li class="list-group-item exists-in-db" data-id="{{ $medicamentoRecetado->id }}">
+                            ({{ $medicamentoRecetado->medicamento->codigo }}) {{ $medicamentoRecetado->medicamento->descripcion }}
                             - Cantidad: {{ $medicamentoRecetado->cantidad }}, Unidad: {{ $medicamentoRecetado->unidad }},
                             Cada Cuándo: {{ $medicamentoRecetado->cadaCuando }}, Cuántos Días: {{ $medicamentoRecetado->cuantosDias }}
+                            <button class="btn btn-danger btn-sm float-right eliminar-medicamento">Eliminar</button>
                         </li>
                     @endforeach
                 </ul>
@@ -131,8 +132,12 @@
 
         Array.from(select.selectedOptions).forEach(option => {
             const li = document.createElement('li');
-            li.textContent = `${option.text} - ${cantidad} ${unidad} - Cada ${cadaCuando} - ${cuantosDias} días`;
             li.classList.add('list-group-item');
+            li.setAttribute('data-id', option.value);
+            li.innerHTML = `
+                (${option.text}) - ${cantidad} ${unidad} - Cada ${cadaCuando} - ${cuantosDias} días
+                <button class="btn btn-danger btn-sm float-right eliminar-medicamento">Eliminar</button>
+            `;
             lista.appendChild(li);
 
             // Crear campos ocultos para enviar con el formulario
@@ -155,6 +160,46 @@
         document.getElementById('unidad').value = '';
         document.getElementById('cadaCuando').value = '';
         document.getElementById('cuantosDias').value = '';
+
+        // Cerrar el modal
+        $('#medicamentoModal').modal('hide');
+    });
+    document.getElementById('listaMedicamentos').addEventListener('click', function(event) {
+        if (event.target.classList.contains('eliminar-medicamento')) {
+            event.preventDefault(); // Previene el comportamiento predeterminado
+            const listItem = event.target.closest('.list-group-item');
+            const medicamentoId = listItem.getAttribute('data-id');
+
+            if (confirm('¿Está seguro de que desea eliminar este medicamento?')) {
+                // Comprueba si el medicamento ya existe en la base de datos
+                if (listItem.classList.contains('exists-in-db')) {
+                    fetch(`/eliminar-medicamento/${medicamentoId}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            listItem.remove();
+                        } else {
+                            alert('Error al eliminar el medicamento.');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+                } else {
+                    // Si no existe en la base de datos, solo eliminar del DOM y del JSON
+                    listItem.remove();
+                    // Remover el campo oculto correspondiente
+                    const hiddenInput = document.querySelector(`input[name="medicamentos[]"][value*="${medicamentoId}"]`);
+                    if (hiddenInput) {
+                        hiddenInput.remove();
+                    }
+                }
+            }
+        }
     });
 </script>
 @stop
