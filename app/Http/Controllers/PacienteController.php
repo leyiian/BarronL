@@ -38,7 +38,28 @@ class PacienteController extends Controller
 
     public function save(Request $req)
     {
-        $paciente = $req->id ? Paciente::findOrFail($req->id) : new Paciente();
+        if ($req->id) {
+            $paciente = Paciente::findOrFail($req->id);
+            $user = User::findOrFail($paciente->idUsr);
+            $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
+            if ($req->filled('email')) {
+                $user->email = $req->email;
+            }
+            if ($req->filled('password')) {
+                $user->password = Hash::make($req->password);
+            }
+            $user->save();
+        } else {
+            $user = new User();
+            $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
+            $user->email = $req->email;
+            $user->password = Hash::make($req->password);
+            $user->rol = 'P'; // Asumiendo que 'P' es el rol para pacientes
+            $user->save();
+
+            $paciente = new Paciente();
+            $paciente->idUsr = $user->id;
+        }
 
         $paciente->nombre = $req->nombre;
         $paciente->apPat = $req->apPat;
@@ -47,6 +68,7 @@ class PacienteController extends Controller
         $paciente->save();
 
         return redirect()->route('pacientes');
+        
     }
 
     public function saveApi(Request $req)
