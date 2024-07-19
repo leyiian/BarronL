@@ -7,15 +7,25 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Especialidad;
+use Illuminate\Support\Facades\Log;
+
 
 class DoctorController extends Controller
 {
     public function index(Request $req)
     {
-        $doctor = $req->id ? Doctor::findOrFail($req->id) : new Doctor();
-        $user = $req->id ? User::findOrFail($doctor->idUsr) : null;
-        $especialidades = Especialidad::all();
-        return view('doctor', compact('doctor', 'especialidades', 'user'));
+        try {
+            $doctor = $req->id ? Doctor::findOrFail($req->id) : new Doctor();
+            $user = $req->id ? User::findOrFail($doctor->idUsr) : null;
+            $especialidades = Especialidad::all();
+    
+            Log::info('Acceso a vista de doctor', ['doctor_id' => $req->id, 'user_id' => $user ? $user->id : null]);
+    
+            return view('doctor', compact('doctor', 'especialidades', 'user'));
+        } catch (\Exception $e) {
+            Log::error('Error al acceder a vista de doctor: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            return back()->with('error', 'Hubo un problema al acceder a la vista.');
+        }
     }
 
     public function list($idEspecialidad = null)

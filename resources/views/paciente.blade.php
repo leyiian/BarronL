@@ -38,6 +38,14 @@
                                 <input type="text" class="form-control mt-1" id="telefono" inputmode="numeric"
                                     pattern="\d*" name="telefono" placeholder="Teléfono" value="{{ $paciente->telefono }}" />
                             </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" class="form-control mt-1" id="email" name="email" required placeholder="Email" value="{{ $user->email ?? '' }}" />
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input type="password" class="form-control mt-1" id="password" name="password" required placeholder="Password" />
+                            </div>
                             <button type="submit" class="btn btn-outline-success">Guardar</button>
                         </form>
                     </div>
