@@ -37,7 +37,7 @@
                     @endforeach
                 </select>
             </div>
-            
+
             <!-- Botón para abrir el modal de medicamentos -->
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#medicamentoModal">
                 Agregar Medicamento
@@ -56,7 +56,7 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label for="medicamentos">Medicamentos</label>
-                                <select id="medicamentos" class="form-select" aria-label="Seleccionar medicamento">
+                                <select id="medicamentos" class="form-control" aria-label="Seleccionar medicamento">
                                     <option>Seleccionar medicamento</option>
                                     @foreach($medicamentos as $medicamento)
                                         <option value="{{ $medicamento->id }}">
