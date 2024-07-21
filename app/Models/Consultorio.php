@@ -9,4 +9,5 @@ class Consultorio extends Model
 {
     use HasFactory;
     protected $table = 'consultorios';
+    protected $fillable = ['numero'];
 }

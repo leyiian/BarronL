@@ -6,14 +6,20 @@ use App\Models\Paciente;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class PacienteController extends Controller
 {
     public function index(Request $req)
     {
-        $paciente = $req->id ? Paciente::findOrFail($req->id) : new Paciente();
-
-        return view('paciente', compact('paciente'));
+        try {
+            $paciente = $req->id ? Paciente::findOrFail($req->id) : new Paciente();
+            Log::info('Acceso a vista de paciente', ['paciente_id' => $req->id]);
+            return view('paciente', compact('paciente'));
+        } catch (\Exception $e) {
+            Log::error('Error al acceder a vista de paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            return back()->with('error', 'Hubo un problema al acceder a la vista.');
+        }
     }
 
     public function list()
@@ -38,37 +44,43 @@ class PacienteController extends Controller
 
     public function save(Request $req)
     {
-        if ($req->id) {
-            $paciente = Paciente::findOrFail($req->id);
-            $user = User::findOrFail($paciente->idUsr);
-            $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
-            if ($req->filled('email')) {
+        try {
+            if ($req->id) {
+                $paciente = Paciente::findOrFail($req->id);
+                $user = User::findOrFail($paciente->idUsr);
+                $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
+                if ($req->filled('email')) {
+                    $user->email = $req->email;
+                }
+                if ($req->filled('password')) {
+                    $user->password = Hash::make($req->password);
+                }
+                $user->save();
+            } else {
+                $user = new User();
+                $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
                 $user->email = $req->email;
-            }
-            if ($req->filled('password')) {
                 $user->password = Hash::make($req->password);
+                $user->rol = 'P'; // Asumiendo que 'P' es el rol para pacientes
+                $user->save();
+
+                $paciente = new Paciente();
+                $paciente->idUsr = $user->id;
             }
-            $user->save();
-        } else {
-            $user = new User();
-            $user->name = $req->nombre . ' ' . $req->apPat . ' ' . $req->apMat;
-            $user->email = $req->email;
-            $user->password = Hash::make($req->password);
-            $user->rol = 'P'; // Asumiendo que 'P' es el rol para pacientes
-            $user->save();
 
-            $paciente = new Paciente();
-            $paciente->idUsr = $user->id;
+            $paciente->nombre = $req->nombre;
+            $paciente->apPat = $req->apPat;
+            $paciente->apMat = $req->apMat;
+            $paciente->telefono = $req->telefono;
+            $paciente->save();
+
+            Log::info('Paciente guardado exitosamente', ['paciente_id' => $paciente->id]);
+
+            return redirect()->route('pacientes')->with('success', 'Paciente guardado correctamente.');;
+        } catch (\Exception $e) {
+            Log::error('Error al guardar paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            return back()->with('error', 'Hubo un problema al guardar el paciente.');
         }
-
-        $paciente->nombre = $req->nombre;
-        $paciente->apPat = $req->apPat;
-        $paciente->apMat = $req->apMat;
-        $paciente->telefono = $req->telefono;
-        $paciente->save();
-
-        return redirect()->route('pacientes');
-        
     }
 
     public function saveApi(Request $req)
@@ -80,7 +92,6 @@ class PacienteController extends Controller
         $user->password = Hash::make($req->password);
         $user->rol = 'P';
         $user->save();
-
 
         $paciente = new Paciente();
         $paciente->nombre = $req->nombre;
@@ -95,9 +106,18 @@ class PacienteController extends Controller
 
     public function delete(Request $req)
     {
-        $paciente = Paciente::findOrFail($req->id);
-        $paciente->delete();
-        return redirect()->route('pacientes');
+        try {
+            $paciente = Paciente::findOrFail($req->id);
+            $user = User::findOrFail($paciente->idUsr);
+            $paciente->delete();
+            Log::info('Paciente eliminado exitosamente', ['paciente_id' => $req->id]);
+            $user->delete();
+            Log::info('Usuario asociado al paciente eliminado', ['user_id' => $user->id]);
+            return redirect()->route('pacientes')->with('success', 'Paciente eliminado correctamente.');
+        } catch (\Exception $e) {
+            Log::error('Error al eliminar paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            return back()->with('error', 'Hubo un problema al eliminar el paciente.');
+        }
     }
 
     public function deleteApi(Request $req)

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('apPat');
             $table->string('apMat');
             $table->string('telefono')->nullable();
-            $table->unsignedBigInteger('idUsr');
+            $table->unsignedBigInteger('idUsr')->nullable();
 
             $table->foreign('idUsr')->references('id')->on('users');
         });

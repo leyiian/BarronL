@@ -9,4 +9,11 @@ class Material extends Model
 {
     use HasFactory;
     protected $table = 'material';
+    protected $fillable = [
+        'codigo',
+        'descripcion',
+        'precio',
+        'existencia',
+        'fecha_caducidad',
+    ];
 }
