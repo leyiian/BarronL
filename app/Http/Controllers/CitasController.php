@@ -59,16 +59,24 @@ class CitasController extends Controller
     public function list()
     {
         $user = Auth::user();
+        $citas = [];
 
         if ($user->rol == 'A') {
+            // Si el usuario es un administrador, obtén todas las citas
             $citas = Citas::all();
-        }
-        elseif ($user->rol == 'D') {
+        } elseif ($user->rol == 'D') {
+            // Si el usuario es un doctor, filtra las citas por el doctor asignado
             $doctor = Doctor::where('idUsr', $user->id)->first();
-            $id_especialidad = $doctor->id_especialidad;
-            $citas = Citas::where('id_especialidades', $id_especialidad)
-                ->get();
+
+            if ($doctor) {
+                $citas = Citas::where('id_doctor', $doctor->id)->get();
+            } else {
+                // Si el doctor no se encuentra, no hay citas para mostrar
+                $citas = [];
+            }
         }
+
+        // Procesar citas para añadir información adicional
         foreach ($citas as $cita) {
             $paciente = Paciente::find($cita->id_paciente);
             $doctor = Doctor::find($cita->id_doctor);
