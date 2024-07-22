@@ -26,6 +26,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('doctores/eliminar', [DoctorController::class, 'deleteApi']);
 
     Route::post('cita/guardar', [CitasController::class, 'saveApi']);
+    Route::post('citas/paciente', [CitasController::class, 'indexApi']);
+
     Route::get('pacientes', [PacienteController::class, 'listApi']);
     Route::post('paciente', [PacienteController::class, 'getApi']);
     Route::get('especialidades', [EspecialidadController::class, 'listApi']);

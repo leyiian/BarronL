@@ -15,25 +15,6 @@ use Illuminate\Support\Facades\Auth;
 class CitasController extends Controller
 {
 
-    public function paciente()
-    {
-        return $this->belongsTo(Paciente::class, 'id_paciente');
-    }
-
-    public function doctor()
-    {
-        return $this->belongsTo(Doctor::class, 'id_doctor');
-    }
-
-    public function especialidad()
-    {
-        return $this->belongsTo(Especialidad::class, 'id_especialidad');
-    }
-
-    public function consultorio()
-    {
-        return $this->belongsTo(Consultorio::class, 'id_consultorio');
-    }
     public function index(Request $req)
     {
         $cita = $req->id ? Citas::findOrFail($req->id) : new Citas();
@@ -57,6 +38,24 @@ class CitasController extends Controller
 
         return view('cita', compact('cita', 'doctores',  'consultorios', 'medicamentos','medicamentosRecetados'));
     }
+    public function indexApi(Request $req)
+    {
+        // Busca el paciente por idUsr
+        $paciente = Paciente::where('idUsr', $req->idUsr)->first();
+
+        // Verifica si el paciente existe
+        if (!$paciente) {
+            return response()->json(['message' => 'Paciente no encontrado'], 404);
+        }
+
+        // Busca las citas del paciente usando su id
+        $citas = Citas::where('id_paciente', $paciente->id)->get();
+
+        // Retorna las citas en formato JSON
+        return response()->json($citas);
+    }
+
+
     public function list()
     {
         $user = Auth::user();
@@ -108,7 +107,7 @@ class CitasController extends Controller
         $cita->id_doctor = $request->id_doctor;
         $cita->id_especialidades = $request->id_especialidades;
         $cita->save();
-        
+
         $medicamentos = $request->medicamentos;
         if ($request->medicamentos) {
             foreach ($request->medicamentos as $medicamentoJSON) {
