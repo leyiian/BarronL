@@ -26,6 +26,11 @@
                     <input type="text" class="form-control" id="nombreCompletoPaciente"
                         value="{{ $cita->nombreEspecialidad }}" readonly>
                 </div>
+                @if ($user->rol == 'A')
+                    <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
+
+                @endif
+                <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
                 @if ($user->rol == 'D')
 
 
