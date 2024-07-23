@@ -90,8 +90,10 @@ class CitasController extends Controller
 
     public function save(Request $request)
     {
+        // Encuentra o crea una nueva cita
         $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
 
+        // Asigna los valores de la solicitud a la cita
         $cita->id_paciente = $request->id_paciente;
         $cita->fecha = $request->fecha;
         $cita->Observaciones = $request->Observaciones;
@@ -101,7 +103,7 @@ class CitasController extends Controller
         $cita->id_especialidades = $request->id_especialidades;
         $cita->save();
 
-        //$medicamentos = $request->medicamentos;
+        // Procesa los medicamentos si existen
         if ($request->medicamentos) {
             foreach ($request->medicamentos as $medicamentoJSON) {
                 $medicamento = json_decode($medicamentoJSON, true);
@@ -115,11 +117,11 @@ class CitasController extends Controller
                 $medicamentoRecetado->save();
             }
         }
-        $doctores = Doctor::where('id_especialidad', $request->id_especialidades)->get();
 
-
-        return redirect()->route('citas', compact('cita', 'doctores'));
+        // Redireccionar a la ruta de citas
+        return redirect()->route('citas');
     }
+
 
     public function listApi()
     {

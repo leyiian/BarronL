@@ -29,6 +29,9 @@
                 @if ($user->rol == 'A')
                     <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
                 @endif
+                @if ($user->rol == 'D')
+                    <input type="hidden" name="id_doctor" value="{{ $cita->id_doctor }}">
+                @endif
                 <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
                 @if ($user->rol == 'D')
                     <div class="form-group">
@@ -57,8 +60,7 @@
                     <select name="id_consultorio" id="id_consultorio" class="form-control">
                         <option value="">Seleccionar Consultorio</option>
                         @foreach ($consultorios as $consultorio)
-                            <option value="{{ $consultorio->id }}"
-                                    @if (isset($cita) && $cita->id_consultorio == $consultorio->id) selected @endif>
+                            <option value="{{ $consultorio->id }}" @if (isset($cita) && $cita->id_consultorio == $consultorio->id) selected @endif>
                                 {{ $consultorio->numero }}
                             </option>
                         @endforeach
