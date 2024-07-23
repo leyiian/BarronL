@@ -19,39 +19,27 @@ class CitasController extends Controller
     {
         $cita = $req->id ? Citas::findOrFail($req->id) : new Citas();
         $paciente = Paciente::find($cita->id_paciente);
-
         $cita->nombreCompletoPaciente = $paciente
             ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
             : 'Paciente no encontrado';
-
         $especialidad = Especialidad::find($cita->id_especialidades);
-
         $cita->nombreEspecialidad = $especialidad
             ? $especialidad->nombre
             : 'Especialidad no encontrada';
-
-        $doctores = Doctor::all();
-
+        $doctores = $especialidad ? Doctor::where('id_especialidad', $especialidad->id)->get() : collect();
         $consultorios = Consultorio::all();
         $medicamentos = Medicamento::all();
         $medicamentosRecetados = $req->id ? MedicamentosRecetados::with('medicamento')->where('id_cita', $cita->id)->get() : collect();
-
-        return view('cita', compact('cita', 'doctores',  'consultorios', 'medicamentos','medicamentosRecetados'));
+        return view('cita', compact('cita', 'doctores', 'consultorios', 'medicamentos', 'medicamentosRecetados'));
     }
+
     public function indexApi(Request $req)
     {
-        // Busca el paciente por idUsr
         $paciente = Paciente::where('idUsr', $req->idUsr)->first();
-
-        // Verifica si el paciente existe
         if (!$paciente) {
             return response()->json(['message' => 'Paciente no encontrado'], 404);
         }
-
-        // Busca las citas del paciente usando su id
         $citas = Citas::where('id_paciente', $paciente->id)->get();
-
-        // Retorna las citas en formato JSON
         return response()->json($citas);
     }
 
@@ -62,16 +50,13 @@ class CitasController extends Controller
         $citas = [];
 
         if ($user->rol == 'A') {
-            // Si el usuario es un administrador, obtén todas las citas
             $citas = Citas::all();
         } elseif ($user->rol == 'D') {
-            // Si el usuario es un doctor, filtra las citas por el doctor asignado
             $doctor = Doctor::where('idUsr', $user->id)->first();
 
             if ($doctor) {
                 $citas = Citas::where('id_doctor', $doctor->id)->get();
             } else {
-                // Si el doctor no se encuentra, no hay citas para mostrar
                 $citas = [];
             }
         }
@@ -116,7 +101,7 @@ class CitasController extends Controller
         $cita->id_especialidades = $request->id_especialidades;
         $cita->save();
 
-        $medicamentos = $request->medicamentos;
+        //$medicamentos = $request->medicamentos;
         if ($request->medicamentos) {
             foreach ($request->medicamentos as $medicamentoJSON) {
                 $medicamento = json_decode($medicamentoJSON, true);
@@ -130,8 +115,10 @@ class CitasController extends Controller
                 $medicamentoRecetado->save();
             }
         }
+        $doctores = Doctor::where('id_especialidad', $request->id_especialidades)->get();
 
-        return redirect()->route('citas');
+
+        return redirect()->route('citas', compact('cita', 'doctores'));
     }
 
     public function listApi()
