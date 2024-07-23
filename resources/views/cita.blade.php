@@ -28,16 +28,13 @@
                 </div>
                 @if ($user->rol == 'A')
                     <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
-
                 @endif
                 <input type="hidden" name="Observaciones" value="{{ $cita->Observaciones }}">
                 @if ($user->rol == 'D')
-
-
-                <div class="form-group">
-                    <label for="nombreCompletoPaciente">Observaciones</label>
-                    <input class="form-control" name="Observaciones" value="{{ $cita->Observaciones }}">
-                </div>
+                    <div class="form-group">
+                        <label for="nombreCompletoPaciente">Observaciones</label>
+                        <input class="form-control" name="Observaciones" value="{{ $cita->Observaciones }}">
+                    </div>
                 @endif
                 @if ($user->rol == 'A')
                     <div class="form-group">
@@ -45,7 +42,7 @@
                         <select name="id_doctor" id="id_doctor" class="form-control">
                             <option value="">Seleccionar Doctor</option>
                             @foreach ($doctores as $doctor)
-                                <option value="{{ $doctor->id }}">
+                                <option value="{{ $doctor->id }}" @if (isset($cita) && $cita->id_doctor == $doctor->id) selected @endif>
                                     {{ $doctor->nombre }} {{ $doctor->apellido_paterno }} {{ $doctor->apellido_materno }}
                                 </option>
                             @endforeach
@@ -53,16 +50,15 @@
                         @if ($doctores->isEmpty())
                             <p style="color: red">No se encontraron doctores con la especialidad seleccionada.</p>
                         @endif
-
                     </div>
                 @endif
-
                 <div class="form-group">
                     <label for="id_consultorio">Consultorios</label>
                     <select name="id_consultorio" id="id_consultorio" class="form-control">
                         <option value="">Seleccionar Consultorio</option>
                         @foreach ($consultorios as $consultorio)
-                            <option value="{{ $consultorio->id }}">
+                            <option value="{{ $consultorio->id }}"
+                                    @if (isset($cita) && $cita->id_consultorio == $consultorio->id) selected @endif>
                                 {{ $consultorio->numero }}
                             </option>
                         @endforeach
@@ -70,8 +66,8 @@
                     @if ($consultorios->isEmpty())
                         <p style="color: red">No se encontraron Consultorios</p>
                     @endif
-
                 </div>
+
 
                 @if ($user->rol == 'D')
                     <!-- Botón para abrir el modal de medicamentos -->
@@ -122,7 +118,8 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="button" id="agregarMedicamento" class="btn btn-primary">Agregar</button>
+                                    <button type="button" id="agregarMedicamento"
+                                        class="btn btn-primary">Agregar</button>
                                 </div>
                             </div>
                         </div>
