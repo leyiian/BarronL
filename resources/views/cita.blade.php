@@ -26,10 +26,14 @@
                     <input type="text" class="form-control" id="nombreCompletoPaciente"
                         value="{{ $cita->nombreEspecialidad }}" readonly>
                 </div>
+                @if ($user->rol == 'D')
+
+
                 <div class="form-group">
                     <label for="nombreCompletoPaciente">Observaciones</label>
                     <input class="form-control" name="Observaciones" value="{{ $cita->Observaciones }}">
                 </div>
+                @endif
                 @if ($user->rol == 'A')
                     <div class="form-group">
                         <label for="id_doctor">Doctor</label>
@@ -54,12 +58,12 @@
                         <option value="">Seleccionar Consultorio</option>
                         @foreach ($consultorios as $consultorio)
                             <option value="{{ $consultorio->id }}">
-                                {{ $consultorio->numero }} 
+                                {{ $consultorio->numero }}
                             </option>
                         @endforeach
                     </select>
                     @if ($consultorios->isEmpty())
-                        <p style="color: red">No se encontraron doctores con la especialidad seleccionada.</p>
+                        <p style="color: red">No se encontraron Consultorios</p>
                     @endif
 
                 </div>
