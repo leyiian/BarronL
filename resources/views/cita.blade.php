@@ -2,7 +2,9 @@
 @php
     $user = Auth::user();
 @endphp
-@section('title', 'Dashboard')
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
+
+@section('title', 'Cita')
 
 @section('content_header')
     <h1>Autorizacion Cita / Asignacion doctor</h1>

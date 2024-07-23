@@ -1,6 +1,7 @@
 @extends('adminlte::page')
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-@section('title', 'Lista de Materias')
+@section('title', 'Lista de Especialidades')
 
 @section('content_header')
     <h1>Lista de Especialidades</h1>
