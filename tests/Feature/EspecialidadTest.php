@@ -23,7 +23,7 @@ class EspecialidadTest extends TestCase
             'password' => Hash::make('password'), // Establecer una contraseña para el usuario
         ]);
 
-        $this->actingAs($this->user);
+        $this->user = User::factory()->create(['rol' => 'A']); 
     }
 
     public function test_create_especialidad()
@@ -37,7 +37,7 @@ class EspecialidadTest extends TestCase
             'nombre' => 'Cardiología',
         ]);
     }
-    
+
     public function test_update_especialidad()
     {
         $especialidad = Especialidad::create([

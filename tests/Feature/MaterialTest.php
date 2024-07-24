@@ -16,7 +16,7 @@ class MaterialTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(); // Crear un usuario para autenticación
+        $this->user = User::factory()->create(['rol' => 'A']); 
     }
 
     public function test_create_material()

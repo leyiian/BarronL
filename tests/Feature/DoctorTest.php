@@ -19,12 +19,8 @@ class DoctorTest extends TestCase
         parent::setUp();
 
         // Crear y autenticar un usuario
-        $this->user = User::factory()->create([
-            'email' => 'test@example.com',
-            'password' => Hash::make('password'), // Establecer una contraseña para el usuario
-        ]);
 
-        $this->actingAs($this->user);
+        $this->user = User::factory()->create(['rol' => 'A']); 
     }
 
     public function test_create_doctor()
@@ -40,6 +36,7 @@ class DoctorTest extends TestCase
             'telefono' => '1234567890',
             'email' => 'juan@example.com',
             'password' => 'password123',
+            'rol' => 'D',
         ]);
 
         // Verificar que la respuesta redirige correctamente
