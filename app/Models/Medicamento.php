@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Medicamento extends Model
 {
@@ -15,5 +16,11 @@ class Medicamento extends Model
         'precio',
         'existencia',
         'fecha_caducidad',
+        'estado',
     ];
+    public function setFechaCaducidadAttribute($value)
+    {
+        $this->attributes['fecha_caducidad'] = $value;
+        $this->attributes['estado'] = Carbon::parse($value)->isPast() ? false : true;
+    }
 }

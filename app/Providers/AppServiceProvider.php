@@ -48,5 +48,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('menuCit', function (User $user) {
             return $user->rol == "A" || $user->rol == "D";
         });
+
+        Gate::define('viewLogViewer', function (?User $user) {
+            return $user->rol == "A";
+        });
     }
 }
