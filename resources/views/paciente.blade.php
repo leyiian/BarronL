@@ -1,6 +1,7 @@
 @extends('adminlte::page')
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-@section('title', 'Dashboard')
+@section('title', 'Paciente')
 
 @section('content_header')
     <h1>Pacientes</h1>

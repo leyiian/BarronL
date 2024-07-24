@@ -1,6 +1,7 @@
 @extends('adminlte::page')
+<link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
 
-@section('title', 'Lista de Materias')
+@section('title', 'Lista de Doctores')
 
 @section('content_header')
     <h1>Lista de Doctores</h1>
@@ -66,7 +67,7 @@
                                         <form action="{{ route('borrar.doctor') }}" method="POST" style="display:inline-block;">
                                             @csrf
                                             <input type="hidden" name="id" value="{{ $doctor->id }}">
-                                            
+
                                             <button type="submit" class="btn btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este doctor?');">Eliminar</button>
                                         </form>
                                     </td>
