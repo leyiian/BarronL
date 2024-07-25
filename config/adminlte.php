@@ -400,6 +400,13 @@ return [
                 ],
             ],
         ],
+        ['header' => 'Organizacion'],
+        [
+            'text' => 'Log Viewer',
+            'icon' => 'fas fa-fw fa-history',
+            'url' => 'log-viewer', // La ruta existente del visor de logs
+            'can' => 'viewLogs', // Opcional: Controla el acceso basado en permisos
+        ],
 
     ],
 

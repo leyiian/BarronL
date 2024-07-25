@@ -49,7 +49,7 @@ class AppServiceProvider extends ServiceProvider
             return $user->rol == "A" || $user->rol == "D";
         });
 
-        Gate::define('viewLogViewer', function (?User $user) {
+        Gate::define('viewLogs', function (?User $user) {
             return $user->rol == "A";
         });
     }
