@@ -20,7 +20,7 @@ class DoctorTest extends TestCase
 
         // Crear y autenticar un usuario
 
-        $this->user = User::factory()->create(['rol' => 'A']); 
+        $this->user = User::factory()->create(['rol' => 'A']);
     }
 
     public function test_create_doctor()
@@ -53,5 +53,4 @@ class DoctorTest extends TestCase
             'telefono' => '1234567890',
         ]);
     }
-
 }
