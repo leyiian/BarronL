@@ -108,10 +108,6 @@
                                         <input type="number" id="cantidad" class="form-control">
                                     </div>
                                     <div class="form-group">
-                                        <label for="unidad">Unidad</label>
-                                        <input type="text" id="unidad" class="form-control">
-                                    </div>
-                                    <div class="form-group">
                                         <label for="cadaCuando">Cada Cuándo</label>
                                         <input type="text" id="cadaCuando" class="form-control">
                                     </div>
@@ -149,6 +145,10 @@
                     </div>
                 @endif
 
+                @if ($user->rol == 'D')
+                <input type="hidden" name="estado" value="{{ $cita->estado }}">
+                @endif
+
                 @if ($user->rol == 'A')
                     <div class="form-group">
                         <label for="estado">Estado</label>
@@ -173,7 +173,6 @@
         document.getElementById('agregarMedicamento').addEventListener('click', function() {
             const select = document.getElementById('medicamentos');
             const cantidad = document.getElementById('cantidad').value;
-            const unidad = document.getElementById('unidad').value;
             const cadaCuando = document.getElementById('cadaCuando').value;
             const cuantosDias = document.getElementById('cuantosDias').value;
             const lista = document.getElementById('listaMedicamentos');
@@ -183,7 +182,7 @@
                 li.classList.add('list-group-item');
                 li.setAttribute('data-id', option.value);
                 li.innerHTML = `
-                (${option.text}) - ${cantidad} ${unidad} - Cada ${cadaCuando} - ${cuantosDias} días
+                (${option.text}) - ${cantidad}  - Cada ${cadaCuando} - ${cuantosDias} días
                 <button class="btn btn-danger btn-sm float-right eliminar-medicamento">Eliminar</button>
             `;
                 lista.appendChild(li);
@@ -195,7 +194,6 @@
                 inputMedicamento.value = JSON.stringify({
                     id: option.value,
                     cantidad: cantidad,
-                    unidad: unidad,
                     cadaCuando: cadaCuando,
                     cuantosDias: cuantosDias
                 });
@@ -205,7 +203,6 @@
             // Limpiar selección después de agregar
             select.selectedIndex = 0;
             document.getElementById('cantidad').value = '';
-            document.getElementById('unidad').value = '';
             document.getElementById('cadaCuando').value = '';
             document.getElementById('cuantosDias').value = '';
 

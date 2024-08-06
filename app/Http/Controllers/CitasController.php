@@ -141,7 +141,6 @@ class CitasController extends Controller
                     $medicamentoRecetado->id_cita = $cita->id;
                     $medicamentoRecetado->id_medicamento = $medicamento['id'];
                     $medicamentoRecetado->cantidad = $medicamento['cantidad'];
-                    $medicamentoRecetado->unidad = $medicamento['unidad'];
                     $medicamentoRecetado->cadaCuando = $medicamento['cadaCuando'];
                     $medicamentoRecetado->cuantosDias = $medicamento['cuantosDias'];
                     $medicamentoRecetado->save();
