@@ -14,16 +14,26 @@ class DoctorController extends Controller
 {
     public function index(Request $req)
     {
+        $logUser = auth()->user();
         try {
             $doctor = $req->id ? Doctor::findOrFail($req->id) : new Doctor();
             $user = $req->id ? User::findOrFail($doctor->idUsr) : null;
             $especialidades = Especialidad::all();
-            Log::info('Acceso a vista de doctor', ['doctor_id' => $req->id, 'user_id' => $user ? $user->id : null]);
+            Log::info('Acceso a vista de doctor', [
+                'doctor_id' => $req->id,
+                'user_id' => $user ? $user->id : null,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
 
             return view('doctor', compact('doctor', 'especialidades', 'user'));
 
         } catch (\Exception $e) {
-            Log::error('Error al acceder a vista de doctor: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al acceder a vista de doctor: ' . $e->getMessage(), [
+                'request_data' => $req->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return back()->with('error', 'Hubo un problema al acceder a la vista.');
         }
     }
@@ -57,6 +67,7 @@ class DoctorController extends Controller
 
     public function save(Request $req)
     {
+        $logUser = auth()->user();
         try {
             if ($req->id) {
                 $doctor = Doctor::findOrFail($req->id);
@@ -70,7 +81,13 @@ class DoctorController extends Controller
                 }
                 $user->save();
 
-                Log::info('Doctor actualizado', ['doctor_id' => $doctor->id, 'user_id' => $user->id]);
+                Log::info('Doctor actualizado', [
+                    'doctor_id' => $doctor->id,
+                    'user_id' => $user->id,
+                    'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                    'logUser_name' => $logUser ? $logUser->name : 'No autenticado',
+                    'request_data' => $req->all()
+                ]);
             } else {
                 $user = new User();
                 $user->name = $req->nombre .' '. $req->apellido_paterno .' '. $req->apellido_materno;
@@ -82,7 +99,12 @@ class DoctorController extends Controller
                 $doctor = new Doctor();
                 $doctor->idUsr = $user->id;
 
-                Log::info('Nuevo doctor creado', ['user_id' => $user->id]);
+                Log::info('Nuevo doctor creado', [
+                    'user_id' => $user->id,
+                    'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                    'logUser_name' => $logUser ? $logUser->name : 'No autenticado',
+                    'request_data' => $req->all()
+                ]);
             }
 
             $doctor->nombre = $req->nombre;
@@ -93,11 +115,20 @@ class DoctorController extends Controller
             $doctor->telefono = $req->telefono;
             $doctor->save();
 
-            Log::info('Datos del doctor guardados', ['doctor_id' => $doctor->id]);
+            Log::info('Datos del doctor guardados', [
+                'doctor_id' => $doctor->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado',
+                'request_data' => $req->all()
+            ]);
 
             return redirect()->route('doctores')->with('success', 'Doctor agregado correctamente.');
         } catch (\Exception $e) {
-            Log::error('Error al guardar el doctor: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al guardar el doctor: ' . $e->getMessage(), [
+                'request_data' => $req->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return back()->with('error', 'Hubo un problema al guardar el doctor.');
         }
     }
@@ -122,16 +153,29 @@ class DoctorController extends Controller
 
     public function delete(Request $req)
     {
+        $logUser = auth()->user();
         try {
             $doctor = Doctor::findOrFail($req->id);
             $user = User::findOrFail($doctor->idUsr);
             $doctor->delete();
-            Log::info('Doctor eliminado', ['doctor_id' => $req->id]);
+            Log::info('Doctor eliminado', [
+                'doctor_id' => $req->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             $user->delete();
-            Log::info('Usuario asociado al doctor eliminado', ['user_id' => $user->id]);
+            Log::info('Usuario asociado al doctor eliminado', [
+                'user_id' => $user->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return redirect()->route('doctores')->with('success', 'Doctor eliminado correctamente.');
         } catch (\Exception $e) {
-            Log::error('Error al eliminar el doctor: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al eliminar el doctor: ' . $e->getMessage(), [
+                'request_data' => $req->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return back()->with('error', 'Hubo un problema al eliminar el doctor.');
         }
     }
