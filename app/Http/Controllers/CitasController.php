@@ -18,6 +18,7 @@ class CitasController extends Controller
 
     public function index(Request $req)
     {
+        $logUser = auth()->user();
         try {
             $cita = $req->id ? Citas::findOrFail($req->id) : new Citas();
             $paciente = Paciente::find($cita->id_paciente);
@@ -25,22 +26,39 @@ class CitasController extends Controller
                 ? $paciente->nombre . ' ' . $paciente->apPat . ' ' . $paciente->apMat
                 : 'Paciente no encontrado';
             if (!$paciente) {
-                Log::warning('Paciente no encontrado', ['id_paciente' => $cita->id_paciente]);
+                Log::warning('Paciente no encontrado', [
+                    'id_paciente' => $cita->id_paciente,
+                    'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                    'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+                ]);
             }
             $especialidad = Especialidad::find($cita->id_especialidades);
             $cita->nombreEspecialidad = $especialidad
                 ? $especialidad->nombre
                 : 'Especialidad no encontrada';
             if (!$especialidad) {
-                Log::warning('Especialidad no encontrada', ['id_especialidades' => $cita->id_especialidades]);
+                Log::warning('Especialidad no encontrada', [
+                    'id_especialidades' => $cita->id_especialidades,
+                    'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                    'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+                ]);
             }
             $doctores = $especialidad ? Doctor::where('id_especialidad', $especialidad->id)->get() : collect();
             $consultorios = Consultorio::all();
             $medicamentos = Medicamento::where('estado', true)->get();
             $medicamentosRecetados = $req->id ? MedicamentosRecetados::with('medicamento')->where('id_cita', $cita->id)->get() : collect();
+            Log::info('Acceso a vista de cita', [
+                'cita_id' => $cita->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return view('cita', compact('cita', 'doctores', 'consultorios', 'medicamentos', 'medicamentosRecetados'));
         } catch (\Exception $e) {
-            Log::error('Error al obtener datos en el método index de CitasController: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al obtener datos en el método index de CitasController: ' . $e->getMessage(), [
+                'request_data' => $req->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return back()->with('error', 'Hubo un problema al obtener los datos de la cita.');
         }
     }
@@ -102,6 +120,7 @@ class CitasController extends Controller
 
     public function save(Request $request)
     {
+        $logUser = auth()->user();
         try {
             // Encuentra o crea una nueva cita
             $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
@@ -128,10 +147,19 @@ class CitasController extends Controller
                     $medicamentoRecetado->save();
                 }
             }
-            Log::info('Cita guardada', ['cita_id' => $cita->id]);      
+            Log::info('Cita guardada', [
+                'cita_id' => $cita->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado',
+                'request_data' => $request->all()
+            ]);
             return redirect()->route('citas')->with('success', 'Cita guardada correctamente.');
         } catch (\Exception $e) {
-            Log::error('Error al guardar cita: ' . $e->getMessage(), ['request_data' => $request->all()]);
+            Log::error('Error al guardar cita: ' . $e->getMessage(), [
+                'request_data' => $request->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return back()->with('error', 'Hubo un problema al guardar la cita.');
         }
     }
@@ -145,32 +173,57 @@ class CitasController extends Controller
 
     public function saveApi(Request $request)
     {
-        $paciente = Paciente::where('idUsr', $request->idUsr)->first();
+        try {
+            $paciente = Paciente::where('idUsr', $request->idUsr)->first();
+            if (!$paciente) {
+                return response()->json(['message' => 'Paciente no encontrado'], 404);
+            }
 
-        $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
+            $cita = $request->id ? Citas::findOrFail($request->id) : new Citas();
+            $cita->id_paciente = $paciente->id;
+            $cita->fecha = $request->fecha;
+            $cita->Observaciones = $request->Observaciones;
+            $cita->estado = $request->estado;
+            $cita->id_consultorio = $request->id_consultorio;
+            $cita->id_doctor = $request->id_doctor;
+            $cita->id_especialidades = $request->id_especialidades;
+            $cita->save();
 
-        $cita->id_paciente = $paciente->id;
-        $cita->fecha = $request->fecha;
-        $cita->Observaciones = $request->Observaciones;
-        $cita->estado = $request->estado;
-        $cita->id_consultorio = $request->id_consultorio;
-        $cita->id_doctor = $request->id_doctor;
-        $cita->id_especialidades = $request->id_especialidades;
+            Log::info('Cita guardada a través de API', [
+                'cita_id' => $cita->id,
+                'paciente_id' => $paciente->id,
+                'request_data' => $request->all()
+            ]);
 
-        $cita->save();
+            return response()->json(['message' => 'Cita guardada correctamente'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error al guardar cita a través de API: ' . $e->getMessage(), [
+                'request_data' => $request->all()
+            ]);
 
-        return 'Ok';
+            return response()->json(['message' => 'Hubo un problema al guardar la cita'], 500);
+        }
     }
 
     public function delete(Request $req)
     {
+        $logUser = auth()->user();
         try {
             $cita = Citas::findOrFail($req->id);
             $cita->delete();
-            Log::info('Cita eliminada correctamente', ['cita_id' => $req->id]);
+            Log::info('Cita eliminada correctamente', [
+                'cita_id' => $req->id,
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+
+            ]);
             return redirect()->route('citas')->with('success', 'Cita eliminada correctamente.');
         } catch (\Exception $e) {
-            Log::error('Error al eliminar cita: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al eliminar cita: ' . $e->getMessage(), [
+                'request_data' => $req->all(),
+                'logUser_id' => $logUser ? $logUser->id : 'No autenticado',
+                'logUser_name' => $logUser ? $logUser->name : 'No autenticado'
+            ]);
             return redirect()->route('citas')->with('error', 'Hubo un problema al eliminar la cita.');
         }
     }

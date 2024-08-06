@@ -14,7 +14,13 @@ class PacienteController extends Controller
     {
         try {
             $paciente = $req->id ? Paciente::findOrFail($req->id) : new Paciente();
-            Log::info('Acceso a vista de paciente', ['paciente_id' => $req->id]);
+            $user = auth()->user();
+            Log::info('Acceso a vista de paciente', [
+                'paciente_id' => $req->id,
+                'user_id' => $user ? $user->id : 'No autenticado',
+                'user_name' => $user ? $user->name : 'No autenticado',
+                'request_data' => $req->all()
+            ]);
             return view('paciente', compact('paciente'));
         } catch (\Exception $e) {
             Log::error('Error al acceder a vista de paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
@@ -44,6 +50,7 @@ class PacienteController extends Controller
 
     public function save(Request $req)
     {
+        $userlog = auth()->user();
         try {
             if ($req->id) {
                 $paciente = Paciente::findOrFail($req->id);
@@ -73,12 +80,20 @@ class PacienteController extends Controller
             $paciente->apMat = $req->apMat;
             $paciente->telefono = $req->telefono;
             $paciente->save();
-
-            Log::info('Paciente guardado exitosamente', ['paciente_id' => $paciente->id]);
-
+            Log::info('Paciente guardado exitosamente', [
+                'paciente_id' => $req->id,
+                'user_id' => $userlog ? $userlog->id : 'No autenticado',
+                'user_name' => $userlog ? $userlog->name : 'No autenticado',
+                'request_data' => $req->all()
+            ]);
             return redirect()->route('pacientes')->with('success', 'Paciente guardado correctamente.');;
         } catch (\Exception $e) {
-            Log::error('Error al guardar paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al guardar paciente', [
+                'user_id' => $userlog ? $userlog->id : 'No autenticado',
+                'user_name' => $userlog ? $userlog->name : 'No autenticado',
+                'error_message' => $e->getMessage(),
+                'request_data' => $req->all()
+            ]);
             return back()->with('error', 'Hubo un problema al guardar el paciente.');
         }
     }
@@ -106,16 +121,27 @@ class PacienteController extends Controller
 
     public function delete(Request $req)
     {
+        $userlog = auth()->user();
         try {
             $paciente = Paciente::findOrFail($req->id);
             $user = User::findOrFail($paciente->idUsr);
             $paciente->delete();
-            Log::info('Paciente eliminado exitosamente', ['paciente_id' => $req->id]);
+            Log::info('Paciente eliminado exitosamente', [
+                'paciente_id' => $req->id,
+                'user_id' => $userlog ? $userlog->id : 'No autenticado',
+                'user_name' => $userlog ? $userlog->name : 'No autenticado',
+                'request_data' => $req->all()
+            ]);
             $user->delete();
             Log::info('Usuario asociado al paciente eliminado', ['user_id' => $user->id]);
             return redirect()->route('pacientes')->with('success', 'Paciente eliminado correctamente.');
         } catch (\Exception $e) {
-            Log::error('Error al eliminar paciente: ' . $e->getMessage(), ['request_data' => $req->all()]);
+            Log::error('Error al eliminar paciente', [
+                'user_id' => $userlog ? $userlog->id : 'No autenticado',
+                'user_name' => $userlog ? $userlog->name : 'No autenticado',
+                'error_message' => $e->getMessage(),
+                'request_data' => $req->all()
+            ]);
             return back()->with('error', 'Hubo un problema al eliminar el paciente.');
         }
     }
