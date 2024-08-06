@@ -296,7 +296,7 @@ return [
     'menu' => [
         // Navbar items:
 
-        ['header' => 'Organizacion'],
+        ['header' => 'Menu'],
         [
             'text' => 'especialidades',
             'icon' => 'fas fa-fw fa-share',
@@ -400,7 +400,7 @@ return [
                 ],
             ],
         ],
-        ['header' => 'Organizacion'],
+        ['header' => 'Otros'],
         [
             'text' => 'Log Viewer',
             'icon' => 'fas fa-fw fa-history',

@@ -20,6 +20,6 @@ class DoctorMiddleware
             return $next($request);
         }
 
-        return redirect('/home')->with('error', 'No tienes acceso a esta sección eres un bribon y un muchichito muy rebelde.');
+        return redirect('/home')->with('error', 'No tienes acceso a esta sección eres un bribon y un muchachito muy rebelde.');
     }
 }

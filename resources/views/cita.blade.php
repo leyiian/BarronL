@@ -149,16 +149,19 @@
                     </div>
                 @endif
 
-
-                <div class="form-group">
-                    <label for="estado">Estado</label>
-                    <select name="estado" id="estado" class="form-control">
-                        <option value="Pendiente" {{ $cita->estado == 'Pendiente' ? 'selected' : '' }}>Pendiente</option>
-                        <option value="Autorizado" {{ $cita->estado == 'Autorizado' ? 'selected' : '' }}>Autorizado
-                        </option>
-                        <option value="Rechazado" {{ $cita->estado == 'Rechazado' ? 'selected' : '' }}>Rechazado</option>
-                    </select>
-                </div>
+                @if ($user->rol == 'A')
+                    <div class="form-group">
+                        <label for="estado">Estado</label>
+                        <select name="estado" id="estado" class="form-control">
+                            <option value="Pendiente" {{ $cita->estado == 'Pendiente' ? 'selected' : '' }}>Pendiente
+                            </option>
+                            <option value="Autorizado" {{ $cita->estado == 'Autorizado' ? 'selected' : '' }}>Autorizado
+                            </option>
+                            <option value="Rechazado" {{ $cita->estado == 'Rechazado' ? 'selected' : '' }}>Rechazado
+                            </option>
+                        </select>
+                    </div>
+                @endif
                 <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
         </div>
