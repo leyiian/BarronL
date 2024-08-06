@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medicamento;
+use App\Models\MedicamentosRecetados;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -95,6 +96,12 @@ class MedicamentoController extends Controller
         }
     }
 
+
+    public function obtenerMedicamentos(Request $request){
+        $idCita = $request->input('id_cita');
+        $medicamentos = MedicamentosRecetados::where('id_cita', $idCita)->get();
+        return response()->json(['medicamentos' => $medicamentos]);
+    }
 
 
     public function delete(Request $req)

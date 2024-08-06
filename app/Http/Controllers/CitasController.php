@@ -194,7 +194,7 @@ class CitasController extends Controller
                 'request_data' => $request->all()
             ]);
 
-            return response()->json(['message' => 'Cita guardada correctamente'], 200);
+            return response()->json('Ok');
         } catch (\Exception $e) {
             Log::error('Error al guardar cita a través de API: ' . $e->getMessage(), [
                 'request_data' => $request->all()
@@ -203,6 +203,7 @@ class CitasController extends Controller
             return response()->json(['message' => 'Hubo un problema al guardar la cita'], 500);
         }
     }
+
 
     public function delete(Request $req)
     {
